@@ -1,6 +1,6 @@
 """
 AI Tic-Tac-Toe — Minimax & Alpha-Beta Pruning
-Streamlit version
+Streamlit version (styled)
 
 DSA concepts demonstrated:
 - Recursion        -> minimax() calls itself on every possible next board
@@ -31,6 +31,143 @@ WIN_LINES = [
 # ----------------------------------------------------------------------
 st.set_page_config(page_title="AI Tic-Tac-Toe — Minimax & Alpha-Beta Pruning",
                     page_icon="🎮", layout="wide")
+
+# ----------------------------------------------------------------------
+# Custom styling
+# ----------------------------------------------------------------------
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* App background */
+.stApp {
+    background: radial-gradient(circle at 15% 20%, #1f1147 0%, #0b0620 45%, #060412 100%);
+    color: #f2eefc;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #150a33 0%, #0b0620 100%);
+    border-right: 1px solid rgba(168, 130, 255, 0.25);
+}
+section[data-testid="stSidebar"] * {
+    color: #e6dcff !important;
+}
+
+/* Title */
+h1 {
+    font-weight: 800 !important;
+    background: linear-gradient(90deg, #ff6ec7, #7b5cff 45%, #4fd6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 30px rgba(123, 92, 255, 0.35);
+}
+
+/* Caption text */
+.stCaption, p, span, label, div[data-testid="stMarkdownContainer"] p {
+    color: #cfc4ec !important;
+}
+
+/* Section headers */
+h2, h3 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* Metrics */
+div[data-testid="stMetric"] {
+    background: linear-gradient(145deg, rgba(123,92,255,0.15), rgba(255,110,199,0.08));
+    border: 1px solid rgba(168, 130, 255, 0.35);
+    border-radius: 14px;
+    padding: 12px 10px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+div[data-testid="stMetricValue"] {
+    color: #4fd6ff !important;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700 !important;
+}
+div[data-testid="stMetricLabel"] {
+    color: #cfc4ec !important;
+}
+
+/* Board buttons (tic-tac-toe cells) */
+div[data-testid="column"] button {
+    height: 96px !important;
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    font-family: 'Space Mono', monospace !important;
+    border-radius: 16px !important;
+    border: 2px solid rgba(168, 130, 255, 0.4) !important;
+    background: linear-gradient(145deg, #1c1140, #120a2c) !important;
+    color: #ffffff !important;
+    transition: all 0.18s ease-in-out !important;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35) !important;
+}
+div[data-testid="column"] button:hover:not(:disabled) {
+    border-color: #ff6ec7 !important;
+    box-shadow: 0 0 22px rgba(255, 110, 199, 0.55) !important;
+    transform: translateY(-2px) scale(1.02);
+}
+div[data-testid="column"] button:disabled {
+    opacity: 0.95 !important;
+}
+
+/* Winning line highlight — primary-type buttons */
+div[data-testid="column"] button[kind="primary"] {
+    background: linear-gradient(145deg, #ff6ec7, #7b5cff) !important;
+    border-color: #ff6ec7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 26px rgba(255, 110, 199, 0.7) !important;
+}
+
+/* Sidebar "New Game" button */
+section[data-testid="stSidebar"] button {
+    background: linear-gradient(90deg, #7b5cff, #4fd6ff) !important;
+    color: #0b0620 !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    transition: transform 0.15s ease-in-out !important;
+}
+section[data-testid="stSidebar"] button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 18px rgba(79, 214, 255, 0.5) !important;
+}
+
+/* Selectbox */
+div[data-baseweb="select"] > div {
+    background: #1c1140 !important;
+    border-color: rgba(168, 130, 255, 0.4) !important;
+    color: #f2eefc !important;
+}
+
+/* Alerts (win/lose/draw banners) */
+div[data-testid="stAlert"] {
+    border-radius: 14px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+/* Divider lines */
+hr {
+    border-color: rgba(168, 130, 255, 0.25) !important;
+}
+
+/* Code caption at bottom */
+code {
+    color: #4fd6ff !important;
+    background: rgba(79, 214, 255, 0.08) !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------------------------------------------------
 # Session state — Streamlit reruns the whole script on every interaction,
@@ -208,7 +345,7 @@ def new_game(first_player):
 # ----------------------------------------------------------------------
 # Sidebar controls
 # ----------------------------------------------------------------------
-st.sidebar.header("Game settings")
+st.sidebar.header("⚙️ Game settings")
 difficulty = st.sidebar.selectbox(
     "Difficulty",
     ["Unbeatable (full minimax)", "Medium (70% best move)", "Easy (random-ish)"],
@@ -221,14 +358,14 @@ if st.sidebar.button("🔄 New Game", use_container_width=True):
     st.rerun()
 
 st.sidebar.markdown("---")
-st.sidebar.subheader("Scoreboard")
+st.sidebar.subheader("🏆 Scoreboard")
 c1, c2, c3 = st.sidebar.columns(3)
 c1.metric("Wins", st.session_state.scores["win"])
 c2.metric("Losses", st.session_state.scores["loss"])
 c3.metric("Draws", st.session_state.scores["draw"])
 
 st.sidebar.markdown("---")
-st.sidebar.subheader("DSA concepts in play")
+st.sidebar.subheader("🧠 DSA concepts in play")
 st.sidebar.markdown(
     "- **Recursion** — self-calls on every future board\n"
     "- **Backtracking** — a move is undone after exploring it\n"
@@ -249,13 +386,13 @@ with left:
     # Status line
     if st.session_state.game_over:
         if st.session_state.winner == "draw":
-            st.info("It's a draw — nobody wins the perfect game.")
+            st.info("🤝 It's a draw — nobody wins the perfect game.")
         elif st.session_state.winner == HUMAN:
-            st.success("You win! X takes it. 🎉")
+            st.success("🎉 You win! X takes it.")
         else:
-            st.error("Computer wins with O.")
+            st.error("🤖 Computer wins with O.")
     else:
-        st.write("**Your move**" if st.session_state.human_turn else "**Computer is thinking…**")
+        st.write("**✨ Your move**" if st.session_state.human_turn else "**🤔 Computer is thinking…**")
 
     # 3x3 board rendered as buttons
     board = st.session_state.board
@@ -281,7 +418,7 @@ with left:
                 st.rerun()
 
 with right:
-    st.subheader("What the AI just computed")
+    st.subheader("📊 What the AI just computed")
     st.caption("These numbers update after each AI move.")
 
     stats = st.session_state.stats
@@ -294,7 +431,7 @@ with right:
                st.session_state.chosen_score if st.session_state.chosen_score is not None else "—")
 
     st.markdown("---")
-    st.subheader("How it works")
+    st.subheader("⚡ How it works")
     st.markdown(
         "1. When it's the AI's turn, `find_best_move()` tries every empty cell.\n"
         "2. Each try recursively simulates the rest of the game with `alpha_beta_minimax()`.\n"
